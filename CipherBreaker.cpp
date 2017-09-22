@@ -33,7 +33,9 @@ string encoder();
 
 int main(){
 
-    string toDecode = encoder();
+    ifstream infile {"ciphered_text.txt"};
+ 
+    string toDecode {istreambuf_iterator<char>(infile), istreambuf_iterator<char>()};
     dynamicArray storage;
 
     //iterating over the entire passage
@@ -53,7 +55,7 @@ int main(){
             storage.array[exist].count ++;
           
             if(storage.array[exist].count > 
-                                  storage.array[storage.indexOfLargest].count){
+                                storage.array[storage.indexOfLargest].count){
               storage.indexOfLargest = exist;
             }
         }
@@ -66,9 +68,7 @@ int main(){
 
     //figuring out the shift
     char mostFrequent = storage.array[storage.indexOfLargest].letter;
-    cout << mostFrequent << endl;
     int shift = mostFrequent - ' ';
-    cout << "proposed shift" << shift << endl;
 
     //fixing based on the shift
     string fixed;
@@ -77,29 +77,11 @@ int main(){
     }
 
     cout << "Decoded passage:" << endl;
-    cout << fixed;
+    cout << fixed << endl;
 
   return 0;
 }
 
-string encoder(){
-    srand(time(NULL));
-    int shift = rand() % 26;
-    cout << "real shift: " << shift << endl;
-
-    ifstream infile {"ciphered_text.txt"};
- 
-    string text {istreambuf_iterator<char>(infile), istreambuf_iterator<char>()};
-   
-    string jumbled;
-
-    for (char &c : text){
-        
-        jumbled += (c + shift);
-    }
-
-    return jumbled;
-}
 
 dynamicArray::dynamicArray(){
     array = new alphaCount[0];
